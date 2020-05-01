@@ -2,9 +2,13 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+image: nginx:1.16
+imagePullSecrets: []
+pullPolicy: IfNotPresent
+nameOverride: ""
+fullnameOverride: ""
+
 deployment:
-  image: nginx:1.16
-  pullPolicy: IfNotPresent
   replicaCount: 1
   port: 3000
   command: null
@@ -12,10 +16,6 @@ deployment:
     enabled: false
     path: /healthcheck
     port: 3000
-
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created

@@ -30,7 +30,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: {{ .Values.deployment.image }}
+          image: {{ .Values.image }}
           imagePullPolicy: {{ .Values.deployment.pullPolicy }}
           {{ if .Values.deployment.command }}command: {{- range .Values.deployment.command }}
           - {{ . }}

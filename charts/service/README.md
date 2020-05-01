@@ -3,13 +3,17 @@ Base Helm Chart for services
 
 ## Values
 
+### Root
+```YAML
+image: nginx:1.16
+pullPolicy: IfNotPresent
+```
+
 ### Deployment
 ```YAML
 deployment:
-  image: nginx:1.16
   command: null
   port: 80
-  pullPolicy: IfNotPresent
   replicaCount: 1
   healthcheck:
     enabled: true
