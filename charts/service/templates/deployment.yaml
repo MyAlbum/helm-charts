@@ -1,0 +1,80 @@
+{{ if not .Values.redirectToMaster }}
+{{- $fullName := include "helm-chart.fullname" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "helm-chart.labels" . | nindent 4 }}
+    {{ if .Values.redirectToMaster }}
+    redirectToMaster: 'true'
+    {{ end }}
+spec:
+  replicas: {{ .Values.deployment.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "helm-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm-chart.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "helm-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ .Values.deployment.image }}
+          imagePullPolicy: {{ .Values.deployment.pullPolicy }}
+          {{ if .Values.deployment.command }}command: {{- range .Values.deployment.command }}
+          - {{ . }}
+          {{- end }}{{ end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.deployment.port }}
+              protocol: TCP
+        {{ if .Values.deployment.healthcheck.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.deployment.healthcheck.path }}
+              port: {{ .Values.deployment.healthcheck.port }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.deployment.healthcheck.path }}
+              port: {{ .Values.deployment.healthcheck.port }}
+        {{ end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: DOCKER_IMAGE
+              value: {{ .Values.image }}
+          {{- range $name, $val := .Values.env }}
+            - name: {{ $name }}
+              value: {{ $val | quote }}
+          {{- end }}
+          {{- range $name, $val := .Values.secrets }}
+            - name: {{ $name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $fullName }}
+                  key: {{ $name }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+{{ end }}

@@ -1,0 +1,94 @@
+# BaseChart
+Base Helm Chart for services
+
+## Values
+
+### Deployment
+```YAML
+deployment:
+  image: nginx:1.16
+  command: null
+  port: 80
+  pullPolicy: IfNotPresent
+  replicaCount: 1
+  healthcheck:
+    enabled: true
+    path: /
+    port: 80
+```
+
+### Resources
+```YAML
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+```
+
+### Service
+```YAML
+service:
+  create: true
+  port: 80
+```
+
+### Service account
+```YAML
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: "<role arn>"
+```
+
+### Ingress
+```YAML
+ingress:
+  create: true
+  hosts:
+    - host: example.com
+      paths:
+        - /nginx
+```
+
+### HPA on CPU
+```YAML
+hpa:
+  create: true
+  spec:
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+```
+
+### HPA on SQS size
+```YAML
+sqsMetric:
+  create: true
+  metricName: sqs-example-length
+  queueName: example
+  period: 30
+
+hpa:
+  create: true
+  apiVersion: autoscaling/v2beta1
+  spec:
+    minReplicas: 1
+    maxReplicas: 10
+    metrics:
+    - type: External
+      external:
+        metricName: sqs-example-length
+        targetAverageValue: 10
+```
+
+### Env vars
+```YAML
+env:
+  TEST: 1
+```
+
+### Secrets
+```YAML
+secrets:
+  TEST: 1
+```

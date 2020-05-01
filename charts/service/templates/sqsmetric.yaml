@@ -1,0 +1,23 @@
+{{ if .Values.sqsMetric.create }}
+apiVersion: metrics.aws/v1alpha1
+kind: ExternalMetric
+metadata:
+  name: {{ .Values.sqsMetric.metricName }}
+spec:
+  name: {{ .Values.sqsMetric.metricName }}
+  resource:
+    resource: "deployment"
+  queries:
+    - id: {{ .Values.sqsMetric.metricName | replace "-" "_" }}
+      metricStat:
+        metric:
+          namespace: "AWS/SQS"
+          metricName: "ApproximateNumberOfMessagesVisible"
+          dimensions:
+            - name: QueueName
+              value: {{ .Values.sqsMetric.queueName }}
+        period: {{ .Values.sqsMetric.period }}
+        stat: Average
+        unit: Count
+      returnData: true
+{{ end }}
