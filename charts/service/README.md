@@ -44,6 +44,12 @@ serviceAccount:
   isKubeAdmin: false
   annotations:
     eks.amazonaws.com/role-arn: "<role arn>"
+  role:
+    create: true
+    rules:
+    - apiGroups: ["batch"]
+      resources: ["jobs"]
+      verbs: ["get", "watch", "list", "create", "delete"]
 ```
 
 ### Ingress

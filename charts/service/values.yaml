@@ -22,6 +22,9 @@ serviceAccount:
   annotations: {}
   name:
   isKubeAdmin: false
+  role:
+    create: false
+    rules: []
 
 podSecurityContext: {}
   # fsGroup: 2000
