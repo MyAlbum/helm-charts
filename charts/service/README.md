@@ -34,12 +34,14 @@ resources:
 service:
   create: true
   port: 80
+  nodePort: 30000
 ```
 
 ### Service account
 ```YAML
 serviceAccount:
   create: true
+  isKubeAdmin: false
   annotations:
     eks.amazonaws.com/role-arn: "<role arn>"
 ```

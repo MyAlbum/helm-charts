@@ -10,9 +10,12 @@ spec:
   type: ExternalName
   externalName: {{ include "helm-chart.fullname" . }}.myalbum.svc.cluster.local
   {{ else }}
+  {{ if .Values.service.type }}
   type: {{ .Values.service.type }}
+  {{ end }}
   ports:
   - port: {{ .Values.service.port }}
+    nodePort: {{ .Values.service.nodePort }}
   selector:
     {{- include "helm-chart.selectorLabels" . | nindent 4 }}
   {{ end }}
