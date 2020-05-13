@@ -18,6 +18,10 @@ spec:
     metadata:
       labels:
         {{- include "helm-chart.selectorLabels" . | nindent 8 }}
+      {{- with .Values.deployment.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
