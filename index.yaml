@@ -3,6 +3,16 @@ entries:
   service:
   - apiVersion: v2
     appVersion: 0.0.0
+    created: "2020-09-16T09:54:55.421408114Z"
+    description: Base Helm Chart for MyAlbum Services
+    digest: 45fe620d6a067d9126b590b30e84cf4354194d986adbcb36955b28dc55035376
+    name: service
+    type: application
+    urls:
+    - https://github.com/MyAlbum/helm-charts/releases/download/service-0.0.8/service-0.0.8.tgz
+    version: 0.0.8
+  - apiVersion: v2
+    appVersion: 0.0.0
     created: "2020-08-04T09:00:35.57748331Z"
     description: Base Helm Chart for MyAlbum Services
     digest: 207d564bcfb9b9a68af64dfcc68f20cb9a7ed04c3ef812865fa07a8210dcb436
