@@ -69,6 +69,13 @@ spec:
                   name: {{ $fullName }}
                   key: {{ $name }}
           {{- end }}
+          {{- range $name, $val := .Values.secretRefs }}
+            - name: {{ $name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $val.secret }}
+                  key: {{ $val.key }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

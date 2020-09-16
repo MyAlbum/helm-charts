@@ -104,3 +104,11 @@ env:
 secrets:
   TEST: 1
 ```
+
+### SecretRefs
+```YAML
+secretRefs:
+  TEST:
+    secret: myalbum-generic
+    key: TEST
+```
