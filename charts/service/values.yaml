@@ -78,3 +78,7 @@ sqsMetric:
   metricName: null
   queueName: null
   period: 300
+
+cronjobs:
+  enabled: true
+  jobs: []

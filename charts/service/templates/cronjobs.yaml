@@ -1,0 +1,89 @@
+{{- $fullName := include "helm-chart.fullname" . -}}
+{{ if .Values.cronjobs.enabled }}
+{{- $values := .Values }}
+{{- range $job := .Values.cronjobs.jobs }}
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "{{ $fullName}}-{{ $job.name }}"
+spec:
+  concurrencyPolicy: {{ $job.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ $job.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- if $job.securityContext.runAsUser }}
+          securityContext:
+            runAsUser: {{ $job.securityContext.runAsUser }}
+            {{- if $job.securityContext.runAsGroup }}
+            runAsGroup: {{ $job.securityContext.runAsGroup }}
+            {{- end }}
+            {{- if $job.securityContext.fsGroup }}
+            fsGroup: {{ $job.securityContext.fsGroup }}
+            {{- end }}
+          {{- end }}
+          containers:
+          - {{ if $job.image }}
+            image: {{ $job.image }}
+            {{ else }}
+            image: {{ $values.image }}
+            {{ end }}
+            imagePullPolicy: {{ $values.deployment.imagePullPolicy }}
+            name: {{ $job.name }}
+            env:
+              - name: DOCKER_IMAGE
+                value: {{ $values.image }}
+            {{- range $name, $val := $values.env }}
+              - name: {{ $name }}
+                value: {{ $val | quote }}
+            {{- end }}
+            {{- range $name, $val := $values.secrets }}
+              - name: {{ $name }}
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ $fullName }}
+                    key: {{ $name }}
+            {{- end }}
+            {{- range $name, $val := $values.secretRefs }}
+              - name: {{ $name }}
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ $val.secret }}
+                    key: {{ $val.key }}
+            {{- end }}
+            command: {{ $job.command }}
+            {{- with $job.args }}
+            args:
+{{ toYaml . | indent 12 }}
+              {{- end }}
+            {{- with $job.resources }}
+            resources:
+{{ toYaml . | indent 14 }}
+            {{- end }}
+            {{- with $job.volumeMounts }}
+            volumeMounts:
+{{ toYaml . | indent 12 }}
+            {{- end }}
+          {{- with $job.nodeSelector }}
+          nodeSelector:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          {{- with $job.affinity }}
+          affinity:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          {{- with $job.tolerations }}
+          tolerations:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+          restartPolicy: {{ $job.restartPolicy }}
+          {{- with $job.volumes }}
+          volumes:
+{{ toYaml . | indent 12 }}
+          {{- end }}
+  schedule: {{ $job.schedule | quote }}
+  successfulJobsHistoryLimit: {{ $job.successfulJobsHistoryLimit }}
+{{- end }}
+{{ end }}
