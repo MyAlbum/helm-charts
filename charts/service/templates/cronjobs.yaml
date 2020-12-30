@@ -56,11 +56,9 @@ spec:
                     name: {{ $val.secret }}
                     key: {{ $val.key }}
             {{- end }}
-            command: {{ $job.command }}
-            {{- with $job.args }}
-            args:
-{{ toYaml . | indent 12 }}
-              {{- end }}
+            {{ if $job.command }}command: {{- range $job.command }}
+            - {{ . }}
+            {{- end }}{{ end }}
             {{- with $job.resources }}
             resources:
 {{ toYaml . | indent 14 }}

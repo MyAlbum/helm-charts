@@ -62,6 +62,19 @@ ingress:
         - /nginx
 ```
 
+### Cronjobs
+```YAML
+cronjobs:
+  enabled: true
+  jobs:
+    - name: test
+      image: {}
+      schedule: "*/1 * * * *"
+      securityContext: {}
+      restartPolicy: OnFailure
+      command: ["node", "cron/test.js"]
+```
+
 ### HPA on CPU
 ```YAML
 hpa:
