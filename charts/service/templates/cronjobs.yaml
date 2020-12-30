@@ -1,4 +1,5 @@
 {{- $fullName := include "helm-chart.fullname" . -}}
+{{- $serviceAccountName := include "helm-chart.serviceAccountName" . -}}
 {{ if .Values.cronjobs.enabled }}
 {{- $values := .Values }}
 {{- range $job := .Values.cronjobs.jobs }}
@@ -24,12 +25,14 @@ spec:
             fsGroup: {{ $job.securityContext.fsGroup }}
             {{- end }}
           {{- end }}
+          serviceAccountName: {{ $serviceAccountName }}
           containers:
           - {{ if $job.image }}
             image: {{ $job.image }}
             {{ else }}
             image: {{ $values.image }}
             {{ end }}
+            
             imagePullPolicy: {{ $values.deployment.imagePullPolicy }}
             name: {{ $job.name }}
             env:
