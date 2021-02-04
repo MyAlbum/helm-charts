@@ -125,3 +125,14 @@ secretRefs:
     secret: myalbum-generic
     key: TEST
 ```
+
+### EFS Volumes
+
+```YAML
+efsVolumes:
+  - name: tmp-volume
+    persistentVolumeClaim:
+      claimName: efs-tmp
+    mountPath: /apptmp
+
+```

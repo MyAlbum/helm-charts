@@ -76,6 +76,10 @@ spec:
                   name: {{ $val.secret }}
                   key: {{ $val.key }}
           {{- end }}
+          {{ if .Values.efsVolumes }}volumeMounts: {{- range $volume := .Values.efsVolumes }}
+            - name: {{ $volume.name }}
+              mountPath: {{ $volume.mountPath }}
+          {{- end }}{{ end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -88,4 +92,9 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
+      {{ if .Values.efsVolumes }}volumes: {{- range $volume := .Values.efsVolumes }}
+        - name: {{ $volume.name }}
+          persistentVolumeClaim: 
+            {{- toYaml $volume.persistentVolumeClaim | nindent 12 }}
+      {{- end }}{{ end }}
 {{ end }}
