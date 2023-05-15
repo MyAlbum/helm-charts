@@ -17,8 +17,8 @@ spec:
 {{- with .Values.hpa.spec }}
   {{- toYaml . | nindent 2 }}
 {{- end }}
-behavior:
 {{- with .Values.hpa.behavior }}
+  behavior:
   {{- toYaml . | nindent 2 }}
 {{- end }}
 {{ end }}

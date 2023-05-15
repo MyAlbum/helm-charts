@@ -95,7 +95,7 @@ sqsMetric:
 
 hpa:
   create: true
-  apiVersion: autoscaling/v2beta1
+  apiVersion: autoscaling/v2
   spec:
     minReplicas: 1
     maxReplicas: 10
