@@ -1,0 +1,90 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: ingress - presence
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - not: true
+        containsDocument:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          any: true
+
+  - it: explicitly disabled should pass
+    values:
+      - ../_values/ingress_main_default_hosts.yaml
+    set:
+      ingress.main.enabled: false
+    asserts:
+      - not: true
+        containsDocument:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          any: true
+
+  - it: explicitly enabled should pass
+    values:
+      - ../_values/ingress_main_default_hosts.yaml
+    set:
+      ingress.main.enabled: true
+    asserts:
+      - containsDocument:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          name: release-name
+          any: true
+
+  - it: multiple ingress should pass
+    values:
+      - ../_values/service_main_default.yaml
+      - ../_values/ingress_main_default_hosts.yaml
+    set:
+      ingress.test:
+        hosts:
+          - host: "chart-example.local"
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+    asserts:
+      - containsDocument:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          name: release-name-main
+          any: true
+      - containsDocument:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          name: release-name-test
+          any: true
+
+  - it: multiple ingress with explicit disabled should pass
+    values:
+      - ../_values/ingress_main_default_hosts.yaml
+    set:
+      ingress.test:
+        enabled: false
+        hosts:
+          - host: "chart-example.local"
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+    asserts:
+      - containsDocument:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          name: release-name
+          any: true
+      - not: true
+        containsDocument:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          name: release-name-test
+          any: true

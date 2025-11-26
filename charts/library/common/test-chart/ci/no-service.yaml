@@ -1,0 +1,10 @@
+---
+# yaml-language-server: $schema=../../../common/values.schema.json
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 31
+          pullPolicy: IfNotPresent

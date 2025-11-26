@@ -1,0 +1,67 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod - fields - hostUsers
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+capabilities:
+  majorVersion: 1
+  minorVersion: 29
+tests:
+  - it: should not be present by default for kubernetes < 1.28
+    capabilities:
+      majorVersion: 1
+      minorVersion: 28
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.template.spec.hostUsers
+
+  - it: should not be present even if specified for kubernetes < 1.28
+    capabilities:
+      majorVersion: 1
+      minorVersion: 28
+    set:
+      defaultPodOptions:
+        hostUsers: false
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.template.spec.hostUsers
+
+  - it: should not be present by default for kubernetes >= 1.29
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.template.spec.hostUsers
+
+  - it: hostUsers disabled should set for kubernetes >= 1.29
+    set:
+      defaultPodOptions:
+        hostUsers: false
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.hostUsers
+          value: false
+
+  - it: hostUsers enabled should be set for kubernetes >= 1.29
+    set:
+      defaultPodOptions:
+        hostUsers: true
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.hostUsers
+          value: true

@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: networkPolicy - validations
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  networkpolicies:
+    main:
+      controller: ""
+      rules: {}
+tests:
+  - it: networkpolicy requires either controller reference or podSelector
+    asserts:
+      - failedTemplate:
+          errorMessage: "controller reference or podSelector is required for NetworkPolicy. (NetworkPolicy main)"
+
+  - it: policyTypes is required
+    set:
+      networkpolicies:
+        main:
+          controller: main
+          policyTypes: []
+    asserts:
+      - failedTemplate:
+          errorMessage: "policyTypes is required for NetworkPolicy. (NetworkPolicy main)"
+
+  - it: policyTypes values check
+    set:
+      networkpolicies:
+        main:
+          controller: main
+          policyTypes:
+            - test
+    asserts:
+      - failedTemplate:
+          errorMessage: "Not a valid policyType for NetworkPolicy. (NetworkPolicy main, value test)"

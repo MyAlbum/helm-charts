@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: container - validations
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: image repository is required
+    set:
+      controllers:
+        main:
+          containers:
+            test:
+              image:
+                repository: ""
+                tag: "test"
+    asserts:
+      - failedTemplate:
+          errorMessage: "No image repository specified for container. (controller main, container test)"
+
+  - it: image tag is required
+    set:
+      controllers:
+        main:
+          containers:
+            test:
+              image:
+                repository: test
+                tag: ""
+    asserts:
+      - failedTemplate:
+          errorMessage: "No image tag or digest specified for container. (controller main, container test)"

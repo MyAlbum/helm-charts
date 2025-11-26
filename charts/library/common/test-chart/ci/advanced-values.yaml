@@ -1,0 +1,113 @@
+---
+# yaml-language-server: $schema=../../../common/values.schema.json
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 31
+          pullPolicy: IfNotPresent
+
+        env:
+          HTTP_PORT: 8887
+          HTTPS_PORT: 9997
+
+        probes:
+          liveness:
+            enabled: true
+          readiness:
+            enabled: true
+          startup:
+            enabled: true
+
+      a-container:
+        dependsOn:
+        - main
+        - third-container
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 31
+        env:
+          HTTP_PORT: 8888
+          HTTPS_PORT: 9998
+
+      third-container:
+        dependsOn: main
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 31
+
+  second-controller:
+    type: deployment
+    containers:
+      main:
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 31
+          pullPolicy: IfNotPresent
+        env:
+          HTTP_PORT: 8889
+          HTTPS_PORT: 9999
+
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 8887
+
+ingress:
+  main:
+    hosts:
+    - host: "test.local"
+      paths:
+      - path: /
+        service:
+          identifier: main
+          port: http
+    tls:
+    - hosts:
+      - "test.local"
+
+configMaps:
+  config:
+    data:
+      test: value 1
+
+persistence:
+  data:
+    type: configMap
+    identifier: config
+    advancedMounts:
+      main:
+        # the controller with the "main" identifier
+        main:
+        # the container with the "main" identifier
+        - path: /data/config.yaml
+          readOnly: false
+          subPath: config.yaml
+        second-container:
+        # the container with the "second-container" identifier
+        - path: /appdata/config
+          readOnly: true
+      second-controller:
+        # the controller with the "second-controller" identifier
+        main:
+        # the container with the "main" identifier
+        - path: /data/config.yaml
+          readOnly: false
+          subPath: config.yaml
+
+rawResources:
+  unsupportedPDB:
+    enabled: true
+    forceRename: pdb
+    apiVersion: policy/v1
+    kind: PodDisruptionBudget
+    spec:
+      spec:
+        minAvailable: 1
+        selector:
+          matchLabels:
+            app.kubernetes.io/instance: "{{ .Release.Name }}"

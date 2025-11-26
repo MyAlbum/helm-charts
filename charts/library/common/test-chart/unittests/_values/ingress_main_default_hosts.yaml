@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=../../../common/values.schema.json
+ingress:
+  main:
+    hosts:
+      - host: "chart-example.local"
+        paths:
+          - path: /
+            service:
+              name: RELEASE-NAME
+              port: 8081

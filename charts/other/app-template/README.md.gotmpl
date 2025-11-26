@@ -1,0 +1,49 @@
+{{- define "custom.helm.url" -}}
+https://myalbum.github.io/helm-charts/
+{{- end -}}
+
+{{ template "chart.header" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+## Requirements
+
+{{ template "chart.kubeVersionLine" . }}
+
+## Dependencies
+
+{{ template "chart.requirementsTable" . }}
+
+## Installing the Chart
+
+# Install the chart
+helm install bjw-s app-template -f values.yaml
+```
+
+### OCI
+
+```bash
+# Install the chart
+helm install oci://ghcr.io/bjw-s-labs/helm/app-template -f values.yaml
+```
+
+## Configuration
+
+Read through the [values.yaml](../../library/common/values.yaml) file of the [common library](../../library/common/) chart. It has several commented out suggested values.
+The [CI tests](../../library/common-test/ci) contain a number of scenarios that may prove useful as well.
+
+## Upgrade instructions
+
+Upgrade instructions can be found in the [documentation](https://myalbum.github.io/helm-charts/docs/app-template/#upgrade-instructions).
+
+## Support
+
+- See the [Docs](http://myalbum.github.io/helm-charts/docs/)
+- Open an [issue](https://github.com/MyAlbum/helm-charts/issues/new/choose)
+- Join the home-operations [Discord](https://discord.gg/home-operations) community
+
+{{ template "helm-docs.versionFooter" . }}

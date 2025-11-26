@@ -1,0 +1,8 @@
+---
+# yaml-language-server: $schema=../../../common/values.schema.json
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 8081

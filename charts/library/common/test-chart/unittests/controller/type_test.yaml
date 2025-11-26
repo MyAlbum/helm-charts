@@ -1,0 +1,56 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: controller - types
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: should default to Deployment
+    asserts:
+      - containsDocument:
+          apiVersion: apps/v1
+          kind: Deployment
+          name: release-name
+          any: true
+
+  - it: daemonset should pass
+    set:
+      controllers.main.type: daemonset
+    asserts:
+      - containsDocument:
+          apiVersion: apps/v1
+          kind: DaemonSet
+          name: release-name
+          any: true
+
+  - it: statefulset should pass
+    set:
+      controllers.main.type: statefulset
+    asserts:
+      - containsDocument:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          name: release-name
+          any: true
+
+  - it: cronjob should pass
+    set:
+      controllers.main.type: cronjob
+      controllers.main.cronjob.schedule: "*/20 * * * *"
+    asserts:
+      - containsDocument:
+          apiVersion: batch/v1
+          kind: CronJob
+          name: release-name
+          any: true
+
+  - it: job should pass
+    set:
+      controllers.main.type: job
+    asserts:
+      - containsDocument:
+          apiVersion: batch/v1
+          kind: Job
+          name: release-name
+          any: true
