@@ -17,6 +17,6 @@
           Upgraded the common library to v4.4.1
         links:
           - name: Upgrade notes
-            url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/upgrade-instructions/
+            url: https://myalbum.github.io/helm-charts/docs/app-template/upgrade-instructions/
           - name: Detailed release notes
-            url: https://github.com/bjw-s-labs/helm-charts/releases/tag/common-4.4.1
+            url: https://github.com/myalbum/helm-charts/releases/tag/common-4.4.1
