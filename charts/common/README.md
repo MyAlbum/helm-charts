@@ -1,6 +1,6 @@
 # common
 
-![Version: 4.4.0](https://img.shields.io/badge/Version-4.4.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 4.4.1](https://img.shields.io/badge/Version-4.4.1-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -31,7 +31,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
   - name: common
-    version: 4.4.0
+    version: 4.4.1
     repository: https://myalbum.github.io/helm-charts/
 ```
 
@@ -43,9 +43,9 @@ Read through the [values.yaml](./values.yaml) file. It has several commented out
 
 ## Values
 
-**Important**: When deploying an application Helm chart you can add more values from the common library chart [here](https://github.com/MyAlbum/helm-charts/tree/main/charts/library/common/values.yaml)
+**Important**: When deploying an application Helm chart you can add more values from the common library chart [here](https://github.com/MyAlbum/helm-charts/tree/main/charts/common/values.yaml)
 
-These values will be validated by a JSON schema which can be found [here](https://github.com/MyAlbum/helm-charts/tree/main/charts/library/common/values.schema.json)
+These values will be validated by a JSON schema which can be found [here](https://github.com/MyAlbum/helm-charts/tree/main/charts/common/values.schema.json)
 
 ## Support
 

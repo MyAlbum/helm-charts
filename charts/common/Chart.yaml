@@ -3,12 +3,12 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 4.4.0
+version: 4.4.1
 kubeVersion: ">=1.28.0-0"
 keywords:
   - common
   - library
-home: https://github.com/MyAlbum/helm-charts/tree/main/charts/library/common
+home: https://github.com/MyAlbum/helm-charts/tree/main/charts/common
 sources:
   - https://github.com/MyAlbum/helm-charts
 annotations:
