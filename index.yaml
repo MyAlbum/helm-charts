@@ -5,6 +5,32 @@ entries:
       artifacthub.io/changes: |-
         - kind: changed
           description: |-
+            Upgraded the common library to v4.4.1
+          links:
+            - name: Upgrade notes
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/upgrade-instructions/
+            - name: Detailed release notes
+              url: https://github.com/bjw-s-labs/helm-charts/releases/tag/common-4.4.1
+    apiVersion: v2
+    created: "2025-11-27T08:07:55.947583456Z"
+    dependencies:
+    - name: common
+      repository: https://myalbum.github.io/helm-charts
+      version: 4.4.1
+    description: A common powered chart template. This can be useful for small projects
+      that don't have their own chart.
+    digest: faad5db7a10da598191472e0b0d1c2d087c45f2b3813a508b8c3cc19095868ee
+    kubeVersion: '>=1.28.0-0'
+    name: app-template
+    sources:
+    - https://github.com/MyAlbum/helm-charts
+    urls:
+    - https://github.com/MyAlbum/helm-charts/releases/download/app-template-4.4.1/app-template-4.4.1.tgz
+    version: 4.4.1
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: |-
             Upgraded the common library to v4.4.0
           links:
             - name: Upgrade notes
@@ -285,4 +311,4 @@ entries:
     urls:
     - https://github.com/MyAlbum/helm-charts/releases/download/service-0.0.1/service-0.0.1.tgz
     version: 0.0.1
-generated: "2025-11-27T07:56:47.14077934Z"
+generated: "2025-11-27T08:07:55.947663204Z"
